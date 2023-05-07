@@ -1,0 +1,150 @@
+*
+{
+    box-sizing:border-box;
+}
+:root
+{
+    width: 100%;
+    height: 100%;
+}
+body
+{
+    width: 100%;
+    height: 100%;
+    margin: 0%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-image: url("images/bubbles.jpg");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+}
+main
+{
+    flex-basis: 80%;
+    height: 80%;
+    display: flex;
+    flex-direction: row;
+    border: 3px solid black;
+    box-shadow: 1vmin 1vmin 6vmin;
+    background-color: white;
+}
+section#title
+{
+    flex-basis: 50%;
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    display: flex;
+    font-size: 400%;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center; 
+    background-image: url("images/title.jpg");   
+    background-size: 100% 100%;
+}
+section#form
+{
+    flex-basis: 50%;
+    padding: 2%;
+    display: flex;
+    flex-direction: column;
+    justify-content:space-evenly;
+}
+h2
+{
+    display: flex;
+    justify-content: center;
+}
+form
+{
+    flex-basis: 60%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 120%;
+}
+form div#registered
+{
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+form div#errors
+{
+    color:red;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+form div#email-div
+{
+    display:flex;
+    flex-direction: column;
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+form div#password-div
+{
+    display: flex;
+    flex-direction: column;
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}   
+div#email-div input#email
+{
+    padding: 2%;
+    font-size: 120%;
+    border:2px solid black;
+    border-radius: 5%;
+}
+div#password-div input#password
+{
+    padding: 2%;
+    font-size: 120%;
+    border:2px solid black;
+    border-radius: 5%;
+}
+form button[type="submit"]
+{
+    padding: 2%;
+    font-size: 100%;
+    font-weight: bolder;
+    background-color: crimson;
+    border:2px solid black;
+    border-radius: 5%;
+}
+form button[type="submit"]:hover
+{
+    background-color: rgb(228, 67, 99);
+}
+section#form a#forgot-password
+{
+    display: flex;
+    justify-content: center;
+    font-size: 130%;
+    color:rgb(57, 36, 36);
+}
+section#form a#forgot-password:hover
+{
+    color: rgb(65, 70, 198);
+}
+section#form a#new-here
+{
+    display: flex;
+    justify-content: center;
+    font-size: 130%;
+    color:rgb(57, 36, 36);
+}
+section#form a#new-here:hover
+{
+    color: rgb(65, 70, 198);
+}
+@media screen and (max-width:620px) {
+    :root
+    {
+        height:100%
+    }
+    body
+    {
+        height:100%;
+    }
+    main
+    {
+        height: 100%;
+        flex-direction: column;
+    }
+}

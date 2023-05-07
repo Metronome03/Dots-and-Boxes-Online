@@ -1,0 +1,17 @@
+form
+{
+    flex-basis:80%;
+}
+form div#username-div
+{
+    display: flex;
+    flex-direction: column;
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;   
+}
+div#username-div input#username   
+{
+    padding: 2%;
+    font-size: 120%;
+    border:2px solid black;
+    border-radius: 5%;
+}

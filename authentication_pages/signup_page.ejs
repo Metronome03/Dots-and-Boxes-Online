@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dots and Boxes Online| Sign Up</title>
+    <link type="text/css" rel="stylesheet" href="login_page.css">
+    <link type="text/css" rel="stylesheet" href="signup_page.css">
+</head>
+<body>
+    <main>
+        <section id="title">
+            <div id="dots">DOTS</div>
+            <div id="and">AND</div>
+            <div id="boxes">BOXES</div>
+            <div id="online">ONLINE</div>
+        </section>
+        <section id="form">
+            <form action="/signup" method="post">
+               <h2>SIGN UP</h2> 
+               <%if (Object.keys(error).length>0){
+               Object.values(error).forEach(element => {%>
+                <div id="errors"><%=element%></div>
+               <%});}%>
+                <div id="username-div">
+                    <label for="username">Username</label>
+                    <input required type="text" name="username" id="username" maxlength="32">
+                </div>
+                <div id="email-div">
+                    <label for="email">E-mail ID</label>
+                    <input required type="email" name="email" id="email">
+                </div>
+                <div id="password-div">
+                    <label for="username">Password</label>
+                    <input requried type="password" name="password" id="password" minlength="8">
+                </div>
+                <button type="submit">Sign Up</button>
+            </form>
+        </section>
+    </main>
+</body>
+</html>
