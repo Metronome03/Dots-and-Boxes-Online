@@ -1,42 +1,42 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="w-screen h-main md:h-screen">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dots and Boxes Online| Sign Up</title>
-    <link type="text/css" rel="stylesheet" href="login_page.css">
-    <link type="text/css" rel="stylesheet" href="signup_page.css">
+    <link type="text/css" rel="stylesheet" href="tailwind_build.css">
 </head>
-<body>
-    <main>
-        <section id="title">
-            <div id="dots">DOTS</div>
-            <div id="and">AND</div>
-            <div id="boxes">BOXES</div>
-            <div id="online">ONLINE</div>
+<body class=" bg-biege w-screen h-full flex flex-col md:flex-row justify-center items-center">
+    <main class="w-11/12 h-5/6 main-border font-mono flex flex-col md:flex-row justify-center items-center">
+        <section id="title" class="basis-2/4 w-full md:h-full font-black flex flex-col justify-evenly items-center text-4xl">
+            <div id="dots" class="basis-1/4 w-full flex justify-center items-center bg-blue-700">DOTS</div>
+            <div id="and" class="basis-1/4 w-full flex justify-center items-center bg-green-600">AND</div>
+            <div id="boxes" class="basis-1/4 w-full flex justify-center items-center bg-yellow-500">BOXES</div>
+            <div id="online" class="basis-1/4 w-full flex justify-center items-center bg-red-600">ONLINE</div>
         </section>
-        <section id="form">
-            <form action="/signup" method="post">
-               <h2>SIGN UP</h2> 
+        <section id="form" class="basis-2/4 w-full md:h-full font-bold flex flex-col justify-evenly items-center"> 
+            <form action="/signup" method="post" class="basis-2/3 w-full flex flex-col justify-evenly items-center">
+                <h2 class="font-black flex justify-center text-4xl">SIGN UP</h2> 
                <%if (Object.keys(error).length>0){
                Object.values(error).forEach(element => {%>
-                <div id="errors"><%=element%></div>
+                <div id="errors" class="text-red"><%=element%></div>
                <%});}%>
-                <div id="username-div">
+                <div id="username-div" class="w-full flex flex-col p-[2%] text-2xl">
                     <label for="username">Username</label>
-                    <input required type="text" name="username" id="username" maxlength="32">
+                    <input required type="text" name="username" id="username" maxlength="32" class="input-border p-[2%]">
                 </div>
-                <div id="email-div">
+                <div id="email-div" class="w-full flex flex-col p-[2%] text-2xl">
                     <label for="email">E-mail ID</label>
-                    <input required type="email" name="email" id="email">
+                    <input required type="email" name="email" id="email" class="input-border p-[2%]">
                 </div>
-                <div id="password-div">
+                <div id="password-div" class="w-full flex flex-col p-[2%] text-2xl">
                     <label for="username">Password</label>
-                    <input requried type="password" name="password" id="password" minlength="8">
+                    <input requried type="password" name="password" id="password" minlength="8" class="input-border p-[2%]">
                 </div>
-                <button type="submit">Sign Up</button>
+                <button type="submit" class="w-11/12 p-[2%] text-xl input-border hover:bg-black hover:text-white" class="w-11/12 p-[2%] text-xl input-border hover:bg-black hover:text-white">Sign Up</button>
             </form>
+            <a href="/login" id="new-here" class="text-xl hover:text-rose-700">Back to Login</a>
         </section>
     </main>
 </body>

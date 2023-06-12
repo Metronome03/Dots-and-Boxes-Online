@@ -46,7 +46,7 @@ authRouter.post('/login',async (req,res)=>{
         console.log("User logging in:",user);
         const maxAge=30*24*60*60;
         const token=jwt.sign({id:user._id},'dots boxes secret',{expiresIn:maxAge});
-        res.cookie('jwt',token,{httpOnly:true,secure:true,maxAge:maxAge*1000});
+        res.cookie('jwt',token,{/*httpOnly:true,secure:true*/maxAge:maxAge*1000});
         res.redirect('/');
     }
     catch(err)

@@ -1,0 +1,24 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities
+{
+    .h-main
+    {
+        height:250%;
+    }
+    .main-border
+    {
+        border:2px solid black;
+        box-shadow: 1vmin 1vmin 6vmin;
+    }
+    .bg-biege
+    {
+        background-color: beige;
+    }
+    .input-border
+    {
+        border:2px solid black;
+    }
+}
