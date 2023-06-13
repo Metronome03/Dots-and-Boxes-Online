@@ -45,17 +45,21 @@ function socektRouter(io)
             }
         });
         socket.on('join-game',(playerData,roomID)=>{
-            const playerID=playerData._id;
-            const obj={};
-            obj[playerID]={playerName:playerData.playerName,color:null,score:0};
-            rooms[roomID].players[playerID]=obj[playerID];
-            rooms[roomID].number+=1;
-            socket.join(roomID);
-            socket.emit('roomID',roomID);
-            socket.emit('adminID',rooms[roomID].admin);
-            socket.emit('present-players',rooms[roomID].players);
-            socket.broadcast.to(roomID).emit('player-joined',obj);
-            io.to(roomID).emit('game-ready-status',false);
+            if(playerData&&rooms[roomID].number<4)
+            {
+                const playerID=playerData._id;
+                const obj={};
+                obj[playerID]={playerName:playerData.playerName,color:null,score:0};
+                rooms[roomID].players[playerID]=obj[playerID];
+                rooms[roomID].number+=1;
+                socket.join(roomID);
+                socket.emit('roomID',roomID);
+                socket.emit('adminID',rooms[roomID].admin);
+                socket.emit('present-players',rooms[roomID].players);
+                socket.broadcast.to(roomID).emit('player-joined',obj);
+                socket.emit('joined-game');
+                io.to(roomID).emit('game-ready-status',false);
+            }
         });
         socket.on('color-selected',(playerID,color,roomID)=>{
             rooms[roomID].players[playerID].color=color;
@@ -70,16 +74,92 @@ function socektRouter(io)
                 if(rooms[roomID].selected==rooms[roomID].number)
                 io.to(roomID).emit('game-ready-status',true);
             }
-            socket.broadcast.to(roomID).emit('selected-color',playerID,color);
+            io.to(roomID).emit('selected-color',playerID,color);
         });
         socket.on('game-started',(roomID)=>{
             rooms[roomID].status='running';
-            socket.broadcast.to(roomID).emit('game-started');
+            io.to(roomID).emit('game-started');
+            io.to(roomID).emit('current-player',Object.keys(rooms[roomID].players)[0]);
         });
         socket.on('message-sent',(player,message,roomID)=>
         {
             rooms[roomID].messages.push({player:player,message:message});
             io.to(roomID).emit('message-sent',player,message);
+        });
+        socket.on('move-made',(currentPlayerID,lineID,roomID)=>{
+            io.to(roomID).emit('move-made',currentPlayerID,lineID,roomID);
+            rooms[roomID].moves[lineID]=currentPlayerID;
+            //console.log(rooms[roomID].moves)
+            let line=lineID.split('-');
+            line[0]=parseInt(line[0]);
+            line[1]=parseInt(line[1]);
+            let pointMade=false,box=[0,0];
+            if(line[0]%2!=0)
+            {
+                let toBeChecked1=[line[0]-2+'-'+line[1],line[0]-1+'-'+parseInt(line[1]-1),line[0]-1+'-'+parseInt(line[1]+1)];
+                let toBeChecked2=[line[0]+2+'-'+line[1],line[0]+1+'-'+parseInt(line[1]-1),line[0]+1+'-'+parseInt(line[1]+1)];
+                let marked=0;
+                toBeChecked1.map(id=>{
+                    if(rooms[roomID].moves.hasOwnProperty(id))
+                    marked++;
+                });          
+                if(marked==3)
+                {
+                    pointMade=true;
+                    box=[-1,0];
+                }
+                marked=0;     
+                if(!pointMade)
+                toBeChecked2.map(id=>{
+                    if(rooms[roomID].moves.hasOwnProperty(id))
+                    marked++;
+                });          
+                if(marked==3)
+                {
+                    pointMade=true;
+                    box=[1,0] 
+                }
+            }
+            else
+            {
+                let toBeChecked1=[line[0]+'-'+parseInt(line[1]+2),line[0]-1+'-'+parseInt(line[1]+1),line[0]+1+'-'+parseInt(line[1]+1)];
+                let toBeChecked2=[line[0]+'-'+parseInt(line[1]-2),line[0]-1+'-'+parseInt(line[1]-1),line[0]+1+'-'+parseInt(line[1]-1)];
+                let marked=0;
+                toBeChecked1.map(id=>{
+                    if(rooms[roomID].moves.hasOwnProperty(id))
+                    marked++;
+                });          
+                if(marked==3)
+                {
+                    pointMade=true;
+                    box=[0,1];
+                }
+                marked=0;     
+                if(!pointMade)
+                toBeChecked2.map(id=>{
+                    if(rooms[roomID].moves.hasOwnProperty(id))
+                    marked++;
+                });          
+                if(marked==3)
+                {
+                    pointMade=true;
+                    box=[0,-1];
+                }
+            }
+            if(pointMade)
+            {
+                rooms[roomID].players[currentPlayerID].score+=1;
+                io.to(roomID).emit('score-update',currentPlayerID,rooms[roomID].players[currentPlayerID].score);
+                io.to(roomID).emit('move-made',currentPlayerID,line[0]+box[0]+'-'+parseInt(line[1]+box[1]));
+                socket.emit('current-player',currentPlayerID);
+            }
+            else
+            {
+                let nextIndex=Object.keys(rooms[roomID].players).indexOf(currentPlayerID)+1;
+                if(nextIndex>=Object.keys(rooms[roomID].players).length)
+                nextIndex=0;
+                io.to(roomID).emit('current-player',Object.keys(rooms[roomID].players)[nextIndex]);
+            }
         });
     })
 
