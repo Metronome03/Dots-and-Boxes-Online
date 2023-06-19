@@ -2,9 +2,16 @@
 
 const getUser=async (setUser)=>
 {
-    const result=await fetch('/get-user');
-    const data=await result.json();
-    setUser(data);
+    try
+    {
+        const result=await fetch('/user');
+        const data=await result.json();
+        setUser(data);
+    }
+    catch(err)
+    {
+        console.log(err);
+    }
 }
 
 export { getUser };

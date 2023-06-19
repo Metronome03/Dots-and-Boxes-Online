@@ -7,14 +7,18 @@ function GameWindow()
 {
     const [gameState,setGameState]=useState(false);
     useEffect(()=>{
-        socket.on('game-started',()=>{
-            setGameState(true);
-        })
+        const gameStartred=(value)=>{
+            setGameState(value);
+        };
+        socket.on('game-started',gameStartred);
+        return ()=>{
+            socket.off('game-started',gameStartred);
+        };
     },[]);
     if(!gameState)
     {
         return (
-            <GameSettings/>
+            <GameSettings setGameState={setGameState}/>
         );
     }
     else

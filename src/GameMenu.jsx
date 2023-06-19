@@ -2,17 +2,14 @@ import { MemoryRouter, Routes, Route,useNavigate } from "react-router-dom";
 import { useContext,useRef } from "react";
 import socket from "./Sockets";
 import {UserContext} from './User';
-import { RoomContext } from "./Room";
 
 function MainMenu({setGameActive}) {
   const {user}=useContext(UserContext);
-  const {setAdminID}=useContext(RoomContext);
+
   const navigate=useNavigate();
   
   const handleCreate=()=>{
     
-    setGameActive(true);
-    setAdminID(user._id);
     socket.emit('create-game',user);
   };
 
@@ -58,6 +55,39 @@ function JoinGame({setGameActive}) {
 
 function Settings() {
   const navigate=useNavigate();
+  const {user,setUser}=useContext(UserContext);
+
+  const handleDelete=async ()=>{
+    if(confirm("Are you sure you want to delete this user?"))
+    {
+      try
+      {
+        const result=await fetch('/user',{method:'DELETE'});
+        if(result.ok)
+        {
+          setUser(null);
+          const respnse=await fetch('/logout');
+          location.assign(result.url);
+        }
+      }
+      catch(err)
+      {
+        console.log(err);
+      }
+    }
+  };
+
+  const handleLogout=async (e)=>{
+    try
+    {
+      const result=await fetch('/logout');
+      location.assign(result.url);
+    }
+    catch(err)
+    {
+      console.log("Something went wrong");
+    }
+  };
 
   const handleChangeUsername=()=>{
     navigate('/change-username');
@@ -69,24 +99,50 @@ function Settings() {
   return (
     <div id="settings-window" className="basis-full w-full flex flex-col justify-evenly items-center">
       <button id="change-username" onClick={handleChangeUsername} className="w-11/12 p-[2%] text-xl input-border hover:bg-black hover:text-white">Change Username</button>
-      <button id="delete-user" className="w-11/12 p-[2%] text-xl input-border hover:bg-black hover:text-white">Delete User</button>
-      <button id="logout" className="w-11/12 p-[2%] text-xl input-border hover:bg-black hover:text-white">Log Out</button>
+      <button id="delete-user" onClick={handleDelete} className="w-11/12 p-[2%] text-xl input-border hover:bg-black hover:text-white">Delete User</button>
+      <button id="logout" onClick={handleLogout} className="w-11/12 p-[2%] text-xl input-border hover:bg-black hover:text-white">Log Out</button>
       <button id="back-from-settings" onClick={handleGoBack} className="w-11/12 p-[2%] text-xl input-border hover:bg-black hover:text-white">Back</button>
     </div>
   );
 }
 
 function ChangeUsername() {
-  const navigate=useNavigate();
 
+  const {setUser}=useContext(UserContext);
+  const navigate=useNavigate();
+  const inputValue=useRef(null);
+  
+  const handleChangeUsername=async ()=>{
+    try
+    {
+      const result=await fetch('/user',{
+        method:'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body:JSON.stringify({username:inputValue.current.value})
+      });
+      if(result.ok)
+      {
+        const data=await result.json();
+        console.log(data);
+        setUser(data);
+        handleGoBack(); 
+      }
+    }
+    catch(err)
+    {
+      console.log(err)
+    }
+  };
   const handleGoBack=()=>{
     navigate(-1);
   };
   return (
     <div id="new-username-window" className="basis-full w-full flex flex-col justify-evenly items-center">
       <div id="new-username-head">Enter your new username:</div>
-      <input type="text" id="new-username-input" className="w-11/12 input-border p-[2%]" />
-      <button id="change" className="w-11/12 p-[2%] text-xl input-border hover:bg-black hover:text-white">Change Username</button>
+      <input type="text" id="new-username-input" ref={inputValue} className="w-11/12 input-border p-[2%]" />
+      <button id="change" onClick={handleChangeUsername} className="w-11/12 p-[2%] text-xl input-border hover:bg-black hover:text-white">Change Username</button>
       <button id="back-from-change" onClick={handleGoBack} className="w-11/12 p-[2%] text-xl input-border hover:bg-black hover:text-white">Back</button>
     </div>
   );

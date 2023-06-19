@@ -4,7 +4,9 @@ export default {
     './index.html',
     './src/GameMenu.jsx',
     './src/GameSettings.jsx',
-    './src/GamePlay.jsx'
+    './src/GamePlay.jsx',
+    './src/PlayerInfoStuff.jsx',
+    './src/GameScreen.jsx',
   ],
   theme: {
     extend: {},
