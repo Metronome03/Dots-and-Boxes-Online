@@ -2,6 +2,7 @@ const express=require('express');
 const userModel=require('../models/user_account.js');
 const authRouter=express.Router();
 const jwt=require('jsonwebtoken');
+const handleSocketRemoval=require('./user_pages.js').handleSocketRemoval;
 
 /****************************************************************/
 
@@ -77,6 +78,15 @@ authRouter.post('/signup',async (req,res)=>{
         res.status(404).render('signup_page.ejs',{error:error});
     }
 });
+
+authRouter.get('/logout',(req,res)=>{
+    console.log("Logging out")
+    const id=jwt.decode(req.cookies.jwt).id;
+    handleSocketRemoval(id);
+    res.cookie('jwt','',{maxAge:1});
+    res.redirect('/');
+});
+
 
 
 

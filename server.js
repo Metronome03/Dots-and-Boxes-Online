@@ -1,7 +1,8 @@
 const express=require('express');
+const mongoLink=require('./Mongo');
 const mongoose=require('mongoose');
 const authRouter=require('./routes/authentication.js');
-const userRouter=require('./routes/user_pages.js');
+const userRouter=require('./routes/user_pages.js').socektRouter;
 const jwt=require('jsonwebtoken')
 const cookieParser=require('cookie-parser');
 const { Server } = require("socket.io");
@@ -12,6 +13,7 @@ const app=express();
 const server=require('http').createServer(app);
 
 app.use(cors())
+app.use(express.json());
 app.use(cookieParser());
 app.set('view engine','ejs');
 app.set('views',['authentication_pages'])
@@ -21,7 +23,7 @@ app.use(express.static('tailwind/output'));
 const PORT=3000;
 let i=0;
 let io;
-const db="mongodb+srv://dboadmin:lvz5cAafTQ3VvopN@dotsboxes.i3r3gcy.mongodb.net/dotsboxes?retryWrites=true&w=majority";
+const db=mongoLink;
 mongoose.connect(db,{autoIndex:true})
 .then(()=>{
     server.listen(PORT,()=>{
@@ -29,11 +31,7 @@ mongoose.connect(db,{autoIndex:true})
     });
     console.log("Database is connected");
     
-    io=new Server(server,{
-        cors:{
-            origin:['http://localhost:3001']
-    }
-});
+    io=new Server(server);
     app.use(authStatus,userRouter(io));
 })
 .catch((err)=>{

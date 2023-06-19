@@ -19,7 +19,7 @@
             <form action="/login" method="post" class="basis-2/3 w-full flex flex-col justify-evenly items-center">
                 <h2 class="font-black flex justify-center text-4xl">SIGN IN</h2>
                <%if(user.length>0){%>
-               <div id="registered" class="w-full"><%=user%> registered!</div><%}%>
+               <div id="registered" class=""><%=user%> registered!</div><%}%>
                <%if (Object.keys(error).length>0){
                 Object.values(error).forEach(element => {%>
                  <div id="errors" class="text-red"><%=element%></div>
