@@ -72,7 +72,6 @@ authRouter.post('/signup',async (req,res)=>{
     }
     catch(err)
     {
-        console.log("Something went wrong");
         const error=errorProcessing(err,userModel);
         console.log(error);
         res.status(404).render('signup_page.ejs',{error:error});
